@@ -17,6 +17,7 @@ open class CategoriaResource (val repository:CategoriaRepository) {
 
     @PostMapping
     fun criar(@RequestBody categoria:Categoria, response:HttpServletResponse):ResponseEntity<Categoria> {
+
         var categoriaSalva:Categoria = repository.save(categoria)
 
         val uri:URI = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
@@ -27,8 +28,11 @@ open class CategoriaResource (val repository:CategoriaRepository) {
     }
 
     @GetMapping("/{codigo}")
-    fun buscaPeloCodigo(@PathVariable codigo:Long):Categoria {
-        return repository.findOne(codigo)
+    fun buscaPeloCodigo(@PathVariable codigo:Long):ResponseEntity<Categoria> {
+
+        var categoria:Categoria? = repository.findOne(codigo)
+
+        return if (categoria != null) ResponseEntity.ok(categoria) else ResponseEntity.notFound().build()
     }
 
 }
