@@ -1,16 +1,18 @@
 package com.bonespirito.kotlinflyway.model
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
+import javax.validation.constraints.NotNull
+import javax.validation.constraints.Size
 
 @Entity
+@Table(name="categoria")
 open class Categoria (
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var codigo: Long = 0,
-        var nome: String = ""
+        @NotNull
+        @Size(min = 3, max = 20)
+        val nome: String?
 
 ) {
     override fun equals(other: Any?): Boolean {
