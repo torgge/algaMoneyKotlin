@@ -12,7 +12,7 @@ open class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var codigo: Long = 0
 
-    @NotNull(message = "[NOME] não pode ser nulos")
+    @NotNull(message = "[NOME] não pode ser nulo")
     @Size(min = 3, max = 20, message = "Caracteres mínimo:3 e máximo: 20")
     var nome: String? = null
 
