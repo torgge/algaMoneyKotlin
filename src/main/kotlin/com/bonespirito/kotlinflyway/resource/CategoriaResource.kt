@@ -1,17 +1,22 @@
 package com.bonespirito.kotlinflyway.resource
 
+import com.bonespirito.kotlinflyway.event.RecursoCriadoEvent
 import com.bonespirito.kotlinflyway.model.Categoria
 import com.bonespirito.kotlinflyway.repository.CategoriaRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import java.net.URI
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/categorias")
-open class CategoriaResource (val repository:CategoriaRepository) {
+class CategoriaResource (val repository:CategoriaRepository) {
+
+    @Autowired
+    var publisher : ApplicationEventPublisher? = null
 
     @GetMapping
     fun listar() : List<Categoria> = repository.findAll()
@@ -19,19 +24,21 @@ open class CategoriaResource (val repository:CategoriaRepository) {
     @PostMapping
     fun criar(@Valid @RequestBody categoria:Categoria, response:HttpServletResponse):ResponseEntity<Categoria> {
 
-        var categoriaSalva:Categoria = repository.save(categoria)
+        val categoriaSalva:Categoria = repository.save(categoria)
 
-        val uri:URI = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
-                .buildAndExpand(categoriaSalva.codigo).toUri()
-        response.setHeader("Location", uri.toASCIIString())
+        publisher?.publishEvent(
+                RecursoCriadoEvent( this,
+                response,
+                categoriaSalva.codigo
+        ))
 
-        return ResponseEntity.created(uri).body(categoriaSalva)
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva)
     }
 
     @GetMapping("/{codigo}")
     fun buscaPeloCodigo(@PathVariable codigo:Long):ResponseEntity<Categoria> {
 
-        var categoria:Categoria? = repository.findOne(codigo)
+        val categoria = repository.findOne(codigo)
 
         return if (categoria != null) ResponseEntity.ok(categoria) else ResponseEntity.notFound().build()
     }

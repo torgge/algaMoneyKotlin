@@ -1,17 +1,22 @@
 package com.bonespirito.kotlinflyway.resource
 
+import com.bonespirito.kotlinflyway.event.RecursoCriadoEvent
 import com.bonespirito.kotlinflyway.model.Pessoa
 import com.bonespirito.kotlinflyway.repository.PessoaRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import java.net.URI
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/pessoas")
-open class PessoaResource (val repository: PessoaRepository) {
+class PessoaResource (val repository: PessoaRepository) {
+
+    @Autowired
+    var publisher : ApplicationEventPublisher? = null
 
     @GetMapping
     fun listar() : List<Pessoa> = repository.findAll()
@@ -19,20 +24,20 @@ open class PessoaResource (val repository: PessoaRepository) {
     @PostMapping
     fun criar(@Valid @RequestBody Pessoa:Pessoa, response: HttpServletResponse): ResponseEntity<Pessoa> {
 
-        var PessoaSalva:Pessoa = repository.save(Pessoa)
-
-        val uri: URI = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
-                .buildAndExpand(PessoaSalva.codigo).toUri()
-        response.setHeader("Location", uri.toASCIIString())
-
-        return ResponseEntity.created(uri).body(PessoaSalva)
+        val pessoaSalva = repository.save(Pessoa)
+        publisher?.publishEvent(RecursoCriadoEvent(
+                source = this,
+                response = response,
+                codigo = pessoaSalva.codigo
+        ))
+        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva)
     }
 
     @GetMapping("/{codigo}")
     fun buscaPeloCodigo(@PathVariable codigo:Long):ResponseEntity<Pessoa> {
 
-        var Pessoa:Pessoa? = repository.findOne(codigo)
+        val pessoa = repository.findOne(codigo)
 
-        return if (Pessoa != null) ResponseEntity.ok(Pessoa) else ResponseEntity.notFound().build()
+        return if (pessoa != null) ResponseEntity.ok(pessoa) else ResponseEntity.notFound().build()
     }
 }
