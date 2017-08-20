@@ -22,9 +22,9 @@ class CategoriaResource (val repository:CategoriaRepository) {
     fun listar() : List<Categoria> = repository.findAll()
 
     @PostMapping
-    fun criar(@Valid @RequestBody categoria:Categoria, response:HttpServletResponse):ResponseEntity<Categoria> {
+    fun criar(@Valid @RequestBody categoria: Categoria, response: HttpServletResponse): ResponseEntity<Categoria> {
 
-        val categoriaSalva:Categoria = repository.save(categoria)
+        val categoriaSalva = repository.save(categoria)
 
         publisher?.publishEvent(
                 RecursoCriadoEvent( this,
@@ -41,6 +41,12 @@ class CategoriaResource (val repository:CategoriaRepository) {
         val categoria = repository.findOne(codigo)
 
         return if (categoria != null) ResponseEntity.ok(categoria) else ResponseEntity.notFound().build()
+    }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun remover(@PathVariable codigo: Long) {
+        repository.delete(codigo)
     }
 
 }

@@ -40,4 +40,11 @@ class PessoaResource (val repository: PessoaRepository) {
 
         return if (pessoa != null) ResponseEntity.ok(pessoa) else ResponseEntity.notFound().build()
     }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun remover(@PathVariable codigo: Long) {
+        repository.delete(codigo)
+    }
+
 }
