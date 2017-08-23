@@ -3,6 +3,8 @@ package com.bonespirito.kotlinflyway.resource
 import com.bonespirito.kotlinflyway.event.RecursoCriadoEvent
 import com.bonespirito.kotlinflyway.model.Pessoa
 import com.bonespirito.kotlinflyway.repository.PessoaRepository
+import com.bonespirito.kotlinflyway.service.PessoaService
+import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
@@ -18,13 +20,15 @@ class PessoaResource (val repository: PessoaRepository) {
     @Autowired
     var publisher : ApplicationEventPublisher? = null
 
+    @Autowired
+    var pessoaService: PessoaService? = null
+
     @GetMapping
     fun listar() : List<Pessoa> = repository.findAll()
 
     @PostMapping
-    fun criar(@Valid @RequestBody Pessoa:Pessoa, response: HttpServletResponse): ResponseEntity<Pessoa> {
-
-        val pessoaSalva = repository.save(Pessoa)
+    fun criar(@Valid @RequestBody pessoa: Pessoa, response: HttpServletResponse): ResponseEntity<Pessoa> {
+        val pessoaSalva = repository.save(pessoa)
         publisher?.publishEvent(RecursoCriadoEvent(
                 source = this,
                 response = response,
@@ -34,10 +38,8 @@ class PessoaResource (val repository: PessoaRepository) {
     }
 
     @GetMapping("/{codigo}")
-    fun buscaPeloCodigo(@PathVariable codigo:Long):ResponseEntity<Pessoa> {
-
+    fun buscaPeloCodigo(@PathVariable codigo: Long): ResponseEntity<Pessoa> {
         val pessoa = repository.findOne(codigo)
-
         return if (pessoa != null) ResponseEntity.ok(pessoa) else ResponseEntity.notFound().build()
     }
 
@@ -47,4 +49,16 @@ class PessoaResource (val repository: PessoaRepository) {
         repository.delete(codigo)
     }
 
+    @PutMapping("/{codigo}")
+    fun atualizar(@PathVariable codigo: Long, @Valid @RequestBody pessoa: Pessoa): ResponseEntity<Pessoa> {
+//        var pessoaSalva: Pessoa? = pessoaService?.atualizar(codigo = codigo, pessoa = pessoa)
+        val pessoaSalva = null
+
+        BeanUtils.copyProperties(
+                pessoa,
+                pessoaSalva,
+                "codigo"
+        )
+        return ResponseEntity.ok(pessoaSalva)
+    }
 }
