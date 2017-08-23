@@ -14,7 +14,7 @@ class PessoaService {
     var pessoaRepository: PessoaRepository? = null
 
     fun atualizar(codigo: Long, pessoa: Pessoa): Pessoa {
-        val pessoaSalva = pessoaRepository?.getOne(codigo) ?: throw EmptyResultDataAccessException(1)
+        val pessoaSalva = pessoaRepository?.findOne(codigo) ?: throw EmptyResultDataAccessException(1)
         BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo")
         return pessoaRepository?.save(pessoaSalva)!!
     }

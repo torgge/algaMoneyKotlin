@@ -51,14 +51,7 @@ class PessoaResource (val repository: PessoaRepository) {
 
     @PutMapping("/{codigo}")
     fun atualizar(@PathVariable codigo: Long, @Valid @RequestBody pessoa: Pessoa): ResponseEntity<Pessoa> {
-//        var pessoaSalva: Pessoa? = pessoaService?.atualizar(codigo = codigo, pessoa = pessoa)
-        val pessoaSalva = null
-
-        BeanUtils.copyProperties(
-                pessoa,
-                pessoaSalva,
-                "codigo"
-        )
+        val pessoaSalva: Pessoa? = pessoaService?.atualizar(codigo = codigo, pessoa = pessoa)
         return ResponseEntity.ok(pessoaSalva)
     }
 }
