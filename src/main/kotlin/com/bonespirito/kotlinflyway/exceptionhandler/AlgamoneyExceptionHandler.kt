@@ -26,7 +26,7 @@ class AlgamoneyExceptionHandler : ResponseEntityExceptionHandler() {
     @Override
     override fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any>? {
         val mensagemUsuario = messageSource?.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale())
-        val mensagemDesenvolvedor = ex.cause.toString()
+        val mensagemDesenvolvedor = ex.cause?.toString() ?: ex.toString()
         val erros: List<Erro> = Arrays.asList(Erro(mensagemUsuario, mensagemDesenvolvedor))
         return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request)
     }

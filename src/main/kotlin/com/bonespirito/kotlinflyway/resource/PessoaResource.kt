@@ -54,4 +54,10 @@ class PessoaResource (val repository: PessoaRepository) {
         val pessoaSalva: Pessoa? = pessoaService?.atualizar(codigo = codigo, pessoa = pessoa)
         return ResponseEntity.ok(pessoaSalva)
     }
+
+    @PutMapping("/{codigo}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun atualizaPropriedadeAtivo(@PathVariable codigo: Long, @RequestBody ativo: Boolean?) {
+        pessoaService?.atualizarPropriedadeAtivo(codigo, ativo!!)
+    }
 }
