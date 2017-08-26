@@ -6,18 +6,16 @@ import javax.validation.constraints.Size
 
 @Entity
 @Table(name = "categoria")
-open class Categoria {
+open class Categoria() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var codigo: Long = 0
-
     @NotNull(message = "[NOME] não pode ser nulo")
     @Size(min = 3, max = 20, message = "Caracteres mínimo:3 e máximo: 20")
     var nome: String? = null
 
-    constructor()
-    constructor(codigo: Long, nome: String?) {
+    constructor(codigo: Long, nome: String?) : this() {
         this.codigo = codigo
         this.nome = nome
     }

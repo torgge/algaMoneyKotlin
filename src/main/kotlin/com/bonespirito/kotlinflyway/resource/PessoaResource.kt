@@ -4,7 +4,6 @@ import com.bonespirito.kotlinflyway.event.RecursoCriadoEvent
 import com.bonespirito.kotlinflyway.model.Pessoa
 import com.bonespirito.kotlinflyway.repository.PessoaRepository
 import com.bonespirito.kotlinflyway.service.PessoaService
-import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
@@ -57,7 +56,9 @@ class PessoaResource (val repository: PessoaRepository) {
 
     @PutMapping("/{codigo}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+            /*parametro ativo nullavel, para ser tratado no exceptionhandler*/
     fun atualizaPropriedadeAtivo(@PathVariable codigo: Long, @RequestBody ativo: Boolean?) {
+        /*funcao atualizarPropriedadeAtivo, não aceita propriedade ativo como nula por isso usa-se !!*/
         pessoaService?.atualizarPropriedadeAtivo(codigo, ativo!!)
     }
 }

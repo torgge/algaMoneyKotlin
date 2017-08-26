@@ -6,7 +6,7 @@ import javax.validation.constraints.Size
 
 @Entity
 @Table(name = "pessoa")
-open class Pessoa {
+open class Pessoa() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var codigo: Long = 0
@@ -17,8 +17,7 @@ open class Pessoa {
     @Embedded
     var endereco: Endereco? = null
 
-    constructor()
-    constructor(codigo: Long, nome: String, ativo: Boolean, endereco: Endereco?) {
+    constructor(codigo: Long, nome: String, ativo: Boolean, endereco: Endereco?) : this() {
         this.codigo = codigo
         this.nome = nome
         this.ativo = ativo
@@ -37,11 +36,10 @@ open class Pessoa {
     override fun hashCode(): Int {
         return codigo.hashCode()
     }
-
 }
 
 @Embeddable
-open class Endereco {
+open class Endereco() {
     var logradouro: String = ""
     var numero: String = ""
     var complemento: String = ""
@@ -50,8 +48,7 @@ open class Endereco {
     var cidade: String = ""
     var estado: String = ""
 
-    constructor()
-    constructor(logradouro: String, numero: String, complemento: String, bairro: String, cep: String, cidade: String, estado: String) {
+    constructor(logradouro: String, numero: String, complemento: String, bairro: String, cep: String, cidade: String, estado: String) : this() {
         this.logradouro = logradouro
         this.numero = numero
         this.complemento = complemento
@@ -59,31 +56,5 @@ open class Endereco {
         this.cep = cep
         this.cidade = cidade
         this.estado = estado
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Endereco) return false
-
-        if (logradouro != other.logradouro) return false
-        if (numero != other.numero) return false
-        if (complemento != other.complemento) return false
-        if (bairro != other.bairro) return false
-        if (cep != other.cep) return false
-        if (cidade != other.cidade) return false
-        if (estado != other.estado) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = logradouro.hashCode()
-        result = 31 * result + numero.hashCode()
-        result = 31 * result + complemento.hashCode()
-        result = 31 * result + bairro.hashCode()
-        result = 31 * result + cep.hashCode()
-        result = 31 * result + cidade.hashCode()
-        result = 31 * result + estado.hashCode()
-        return result
     }
 }
