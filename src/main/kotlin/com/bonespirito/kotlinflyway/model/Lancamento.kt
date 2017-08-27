@@ -9,7 +9,7 @@ open class Lancamento() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0
+    var codigo: Long = 0
     var descricao: String = ""
     @Column(name = "data_vencimento")
     var dataVencimento: LocalDate? = null
@@ -26,8 +26,8 @@ open class Lancamento() {
     @JoinColumn(name = "codigo_pessoa")
     var pessoa: Pessoa? = null
 
-    constructor(id: Long, descricao: String, dataVencimento: LocalDate?, dataPagamento: LocalDate?, valor: BigDecimal?, observacao: String, tipo: TipoLancamento?, categoria: Categoria?, pessoa: Pessoa?) : this() {
-        this.id = id
+    constructor(codigo: Long, descricao: String, dataVencimento: LocalDate?, dataPagamento: LocalDate?, valor: BigDecimal?, observacao: String, tipo: TipoLancamento?, categoria: Categoria?, pessoa: Pessoa?) : this() {
+        this.codigo = codigo
         this.descricao = descricao
         this.dataVencimento = dataVencimento
         this.dataPagamento = dataPagamento
@@ -42,12 +42,12 @@ open class Lancamento() {
         if (this === other) return true
         if (other !is Lancamento) return false
 
-        if (id != other.id) return false
+        if (codigo != other.codigo) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return id.hashCode()
+        return codigo.hashCode()
     }
 }
