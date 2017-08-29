@@ -1,8 +1,10 @@
 package com.bonespirito.kotlinflyway.exceptionhandler
 
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -58,6 +60,14 @@ class AlgamoneyExceptionHandler : ResponseEntityExceptionHandler() {
         val mensagemDesenvolvedor = ex.toString()
         val erros = Arrays.asList(Erro(mensagemUsuario, mensagemDesenvolvedor))
         return handleExceptionInternal(ex, erros, HttpHeaders(), HttpStatus.NOT_FOUND, request)
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    fun handleDataIntegrityViolationException(ex: DataIntegrityViolationException, request: WebRequest): ResponseEntity<Any> {
+        val mensagemUsuario = messageSource?.getMessage("recurso.operacao-nao-permitida", null, LocaleContextHolder.getLocale())
+        val mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex)
+        val erros = Arrays.asList(Erro(mensagemUsuario, mensagemDesenvolvedor))
+        return handleExceptionInternal(ex, erros, HttpHeaders(), HttpStatus.BAD_REQUEST, request)
     }
 
 

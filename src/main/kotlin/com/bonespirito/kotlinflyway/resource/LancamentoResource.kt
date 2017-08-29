@@ -37,6 +37,7 @@ class LancamentoResource(val repository: LancamentoRepository) {
                         response,
                         lancamentoSalvo.codigo
                 ))
+
         return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo)
     }
 }

@@ -5,6 +5,7 @@ buildscript {
         mysqlVersion = '5.1.6'
         hibernateVersion = '5.2.10.Final'
         jacksonDataTypeVersion = '2.9.0'
+        commonslang3Version = '3.4'
     }
     repositories {
         mavenCentral()
@@ -40,6 +41,7 @@ configurations {
 }
 
 dependencies {
+    compile("org.apache.commons:commons-lang3:${commonslang3Version}")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonDataTypeVersion}")
     compile("org.hibernate:hibernate-core:${hibernateVersion}")
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
