@@ -3,6 +3,7 @@ package com.bonespirito.kotlinflyway.model
 import java.math.BigDecimal
 import java.time.LocalDate
 import javax.persistence.*
+import javax.validation.constraints.NotNull
 
 @Entity(name = "lancamento")
 open class Lancamento() {
@@ -10,18 +11,24 @@ open class Lancamento() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var codigo: Long = 0
-    var descricao: String = ""
+    @NotNull
+    var descricao: String? = null
+    @NotNull
     @Column(name = "data_vencimento")
     var dataVencimento: LocalDate? = null
     @Column(name = "data_pagamento")
     var dataPagamento: LocalDate? = null
+    @NotNull
     var valor: BigDecimal? = null
     var observacao: String = ""
+    @NotNull
     @Enumerated(EnumType.STRING)
     var tipo: TipoLancamento? = null
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "codigo_categoria")
     var categoria: Categoria? = null
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "codigo_pessoa")
     var pessoa: Pessoa? = null
