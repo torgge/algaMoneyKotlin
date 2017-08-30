@@ -1,5 +1,6 @@
 package com.bonespirito.kotlinflyway.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
@@ -36,6 +37,10 @@ open class Pessoa() {
     override fun hashCode(): Int {
         return codigo.hashCode()
     }
+
+    @JsonIgnore
+    @Transient
+    fun isInativo() = !this.ativo
 }
 
 @Embeddable
