@@ -4,6 +4,7 @@ import com.bonespirito.kotlinflyway.event.RecursoCriadoEvent
 import com.bonespirito.kotlinflyway.exceptionhandler.AlgamoneyExceptionHandler.Erro
 import com.bonespirito.kotlinflyway.model.Lancamento
 import com.bonespirito.kotlinflyway.repository.LancamentoRepository
+import com.bonespirito.kotlinflyway.repository.filter.LancamentoFilter
 import com.bonespirito.kotlinflyway.service.LancamentoService
 import com.bonespirito.kotlinflyway.service.exception.PessoaInexistenteOuInativaException
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,6 +31,11 @@ class LancamentoResource(val repository: LancamentoRepository) {
 
     @Autowired
     val messageSource: MessageSource? = null
+
+    @GetMapping
+    fun pesquisar(lancamentoFilter: LancamentoFilter): List<Lancamento> {
+        return lancamentoService?.lancamentoRepository?.filtrar(lancamentoFilter)!!
+    }
 
     @GetMapping
     fun listar(): List<Lancamento> = repository.findAll()
