@@ -34,7 +34,7 @@ class LancamentoResource(val repository: LancamentoRepository) {
 
     @GetMapping
     fun pesquisar(lancamentoFilter: LancamentoFilter): List<Lancamento> {
-        return lancamentoService?.lancamentoRepository?.filtrar(lancamentoFilter)!!
+        return repository.filtrar(lancamentoFilter)
     }
 
     @GetMapping
