@@ -1,7 +1,8 @@
 package com.bonespirito.kotlinflyway.resource
 
+
 import com.bonespirito.kotlinflyway.event.RecursoCriadoEvent
-import com.bonespirito.kotlinflyway.exceptionhandler.AlgamoneyExceptionHandler.Erro
+import com.bonespirito.kotlinflyway.exceptionhandler.AlgamoneyExceptionHandler
 import com.bonespirito.kotlinflyway.model.Lancamento
 import com.bonespirito.kotlinflyway.repository.LancamentoRepository
 import com.bonespirito.kotlinflyway.repository.filter.LancamentoFilter
@@ -33,12 +34,9 @@ class LancamentoResource(val repository: LancamentoRepository) {
     val messageSource: MessageSource? = null
 
     @GetMapping
-    fun pesquisar(lancamentoFilter: LancamentoFilter): List<Lancamento> {
+    fun pesquisar(lancamentoFilter: LancamentoFilter): MutableList<Lancamento>? {
         return repository.filtrar(lancamentoFilter)
     }
-
-    @GetMapping
-    fun listar(): List<Lancamento> = repository.findAll()
 
     @GetMapping("/{codigo}")
     fun buscaPeloCodigo(@PathVariable codigo: Long): ResponseEntity<Lancamento> {
@@ -64,7 +62,7 @@ class LancamentoResource(val repository: LancamentoRepository) {
     fun handlePessoaInexistenteOuInativaException(ex: PessoaInexistenteOuInativaException): ResponseEntity<Any> {
         val mensagemUsuario = messageSource?.getMessage("pessoa.inexistente-ou-inativa", null, LocaleContextHolder.getLocale())
         val mensagemDesenvolvedor = ex.toString()
-        val erros = Arrays.asList(Erro(mensagemUsuario, mensagemDesenvolvedor))
+        val erros = Arrays.asList(AlgamoneyExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor))
         return ResponseEntity.badRequest().body(erros)
     }
 }

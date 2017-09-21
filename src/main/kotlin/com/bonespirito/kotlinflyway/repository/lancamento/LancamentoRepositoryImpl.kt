@@ -17,7 +17,7 @@ class LancamentoRepositoryImpl : LancamentoRepositoryQuery {
     @PersistenceContext
     val manager: EntityManager? = null
 
-    override fun filtrar(lancamentoFilter: LancamentoFilter): List<Lancamento> {
+    override fun filtrar(lancamentoFilter: LancamentoFilter): MutableList<Lancamento>? {
         val builder: CriteriaBuilder = manager?.criteriaBuilder!!
         val criteria = builder.createQuery(Lancamento::class.java)
         val root = criteria.from(Lancamento::class.java)

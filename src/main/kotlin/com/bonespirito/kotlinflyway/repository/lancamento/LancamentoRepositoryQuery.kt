@@ -5,5 +5,5 @@ import com.bonespirito.kotlinflyway.repository.filter.LancamentoFilter
 
 interface LancamentoRepositoryQuery {
 
-    fun filtrar(lancamentoFilter: LancamentoFilter): List<Lancamento>
+    fun filtrar(lancamentoFilter: LancamentoFilter): MutableList<Lancamento>?
 }
