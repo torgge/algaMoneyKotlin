@@ -65,5 +65,12 @@ class LancamentoResource(val repository: LancamentoRepository) {
         val erros = Arrays.asList(AlgamoneyExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor))
         return ResponseEntity.badRequest().body(erros)
     }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun remover(@PathVariable codigo: Long) {
+        repository.delete(codigo)
+    }
+
 }
 
