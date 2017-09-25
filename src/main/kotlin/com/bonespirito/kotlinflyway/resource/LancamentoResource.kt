@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -34,8 +36,8 @@ class LancamentoResource(val repository: LancamentoRepository) {
     val messageSource: MessageSource? = null
 
     @GetMapping
-    fun pesquisar(lancamentoFilter: LancamentoFilter): MutableList<Lancamento>? {
-        return repository.filtrar(lancamentoFilter)
+    fun pesquisar(lancamentoFilter: LancamentoFilter, pageable: Pageable): Page<Lancamento> {
+        return repository.filtrar(lancamentoFilter, pageable)!!
     }
 
     @GetMapping("/{codigo}")
