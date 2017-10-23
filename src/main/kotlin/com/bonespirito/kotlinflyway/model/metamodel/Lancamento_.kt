@@ -1,5 +1,9 @@
-package com.bonespirito.kotlinflyway.model
+package com.bonespirito.kotlinflyway.model.metamodel
 
+import com.bonespirito.kotlinflyway.model.Categoria
+import com.bonespirito.kotlinflyway.model.Lancamento
+import com.bonespirito.kotlinflyway.model.Pessoa
+import com.bonespirito.kotlinflyway.model.TipoLancamento
 import java.math.BigDecimal
 import java.time.LocalDate
 import javax.annotation.Generated
