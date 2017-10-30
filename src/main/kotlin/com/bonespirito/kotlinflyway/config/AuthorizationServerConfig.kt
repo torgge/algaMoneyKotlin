@@ -27,6 +27,13 @@ class AuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
                 .authorizedGrantTypes("password", "refresh_token")
                 .accessTokenValiditySeconds(1800)
                 .refreshTokenValiditySeconds(3600 * 24)
+            .and()
+                .withClient("mobile")
+                .secret("mobile")
+                .scopes("read")
+                .authorizedGrantTypes("password", "refresh_token")
+                .accessTokenValiditySeconds(1800)
+                .refreshTokenValiditySeconds(3600 * 24)
     }
 
     override fun configure(endpoints: AuthorizationServerEndpointsConfigurer?) {

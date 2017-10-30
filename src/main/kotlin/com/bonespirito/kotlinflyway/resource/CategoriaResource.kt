@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
@@ -19,9 +20,11 @@ class CategoriaResource (val repository:CategoriaRepository) {
     var publisher : ApplicationEventPublisher? = null
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasAnyScope('read')")
     fun listar() : List<Categoria> = repository.findAll()
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasAnyScope('write')")
     fun criar(@Valid @RequestBody categoria: Categoria, response: HttpServletResponse): ResponseEntity<Categoria> {
 
         val categoriaSalva = repository.save(categoria)
@@ -36,6 +39,7 @@ class CategoriaResource (val repository:CategoriaRepository) {
     }
 
     @GetMapping("/{codigo}")
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasAnyScope('read')")
     fun buscaPeloCodigo(@PathVariable codigo:Long):ResponseEntity<Categoria> {
 
         val categoria = repository.findOne(codigo)
