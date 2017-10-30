@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.servlet.http.HttpServletResponse
@@ -36,17 +37,20 @@ class LancamentoResource(val repository: LancamentoRepository) {
     val messageSource: MessageSource? = null
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasAnyScope('read')")
     fun pesquisar(lancamentoFilter: LancamentoFilter, pageable: Pageable): Page<Lancamento> {
         return repository.filtrar(lancamentoFilter, pageable)!!
     }
 
     @GetMapping("/{codigo}")
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasAnyScope('read')")
     fun buscaPeloCodigo(@PathVariable codigo: Long): ResponseEntity<Lancamento> {
         val lancamento = repository.findOne(codigo)
         return if (lancamento != null) ResponseEntity.ok(lancamento) else ResponseEntity.notFound().build()
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and #oauth2.hasAnyScope('write')")
     fun criar(@Valid @RequestBody lancamento: Lancamento, response: HttpServletResponse): ResponseEntity<Lancamento> {
         val lancamentoSalvo = lancamentoService?.salvar(lancamento)
 
@@ -60,18 +64,19 @@ class LancamentoResource(val repository: LancamentoRepository) {
         return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo)
     }
 
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ROLE_REMOVER_LANCAMENTO') and #oauth2.hasAnyScope('write')")
+    fun remover(@PathVariable codigo: Long) {
+        repository.delete(codigo)
+    }
+
     @ExceptionHandler(PessoaInexistenteOuInativaException::class)
     fun handlePessoaInexistenteOuInativaException(ex: PessoaInexistenteOuInativaException): ResponseEntity<Any> {
         val mensagemUsuario = messageSource?.getMessage("pessoa.inexistente-ou-inativa", null, LocaleContextHolder.getLocale())
         val mensagemDesenvolvedor = ex.toString()
         val erros = Arrays.asList(AlgamoneyExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor))
         return ResponseEntity.badRequest().body(erros)
-    }
-
-    @DeleteMapping("/{codigo}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun remover(@PathVariable codigo: Long) {
-        repository.delete(codigo)
     }
 
 }
