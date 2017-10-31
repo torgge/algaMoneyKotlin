@@ -6,6 +6,7 @@ import com.bonespirito.kotlinflyway.exceptionhandler.AlgamoneyExceptionHandler
 import com.bonespirito.kotlinflyway.model.Lancamento
 import com.bonespirito.kotlinflyway.repository.LancamentoRepository
 import com.bonespirito.kotlinflyway.repository.filter.LancamentoFilter
+import com.bonespirito.kotlinflyway.repository.projection.ResumoLancamento
 import com.bonespirito.kotlinflyway.service.LancamentoService
 import com.bonespirito.kotlinflyway.service.exception.PessoaInexistenteOuInativaException
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,6 +41,12 @@ class LancamentoResource(val repository: LancamentoRepository) {
     @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasAnyScope('read')")
     fun pesquisar(lancamentoFilter: LancamentoFilter, pageable: Pageable): Page<Lancamento> {
         return repository.filtrar(lancamentoFilter, pageable)!!
+    }
+
+    @GetMapping(params = arrayOf("resumo"))
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasAnyScope('read')")
+    fun resumir(lancamentoFilter: LancamentoFilter, pageable: Pageable): Page<ResumoLancamento> {
+        return repository.resumir(lancamentoFilter, pageable)!!
     }
 
     @GetMapping("/{codigo}")

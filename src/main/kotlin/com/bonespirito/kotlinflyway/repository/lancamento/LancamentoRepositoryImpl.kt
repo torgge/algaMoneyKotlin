@@ -1,8 +1,11 @@
 package com.bonespirito.kotlinflyway.repository.lancamento
 
 import com.bonespirito.kotlinflyway.model.Lancamento
+import com.bonespirito.kotlinflyway.model.metamodel.Categoria_
 import com.bonespirito.kotlinflyway.model.metamodel.Lancamento_
+import com.bonespirito.kotlinflyway.model.metamodel.Pessoa_
 import com.bonespirito.kotlinflyway.repository.filter.LancamentoFilter
+import com.bonespirito.kotlinflyway.repository.projection.ResumoLancamento
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -36,7 +39,7 @@ open class LancamentoRepositoryImpl : LancamentoRepositoryQuery {
         return PageImpl<Lancamento>(query.resultList, pageable, total(lancamentoFilter))
     }
 
-    private fun adicionarRestricoesDePaginacao(query: TypedQuery<Lancamento>, pageable: Pageable) {
+    private fun <T> adicionarRestricoesDePaginacao(query: TypedQuery<T>, pageable: Pageable) {
         val paginaAtual = pageable.pageNumber
         val totalRegistrosPorPagina = pageable.pageSize
         val primeiroRegistroDaPagina = paginaAtual * totalRegistrosPorPagina
@@ -76,5 +79,30 @@ open class LancamentoRepositoryImpl : LancamentoRepositoryQuery {
         }
 
         return predicates.toTypedArray()
+    }
+
+    override fun resumir(lancamentoFilter: LancamentoFilter, pageable: Pageable): Page<ResumoLancamento>? {
+        val builder = manager!!.criteriaBuilder
+        val criteria = builder.createQuery(ResumoLancamento::class.java)
+        val root = criteria.from(Lancamento::class.java)
+
+        criteria.select(builder.construct(ResumoLancamento::class.java,
+                root.get(Lancamento_.codigo),
+                root.get(Lancamento_.descricao),
+                root.get(Lancamento_.dataVencimento),
+                root.get(Lancamento_.dataPagamento),
+                root.get(Lancamento_.valor),
+                root.get(Lancamento_.tipo),
+                root.get(Lancamento_.categoria).get(Categoria_.nome),
+                root.get(Lancamento_.pessoa).get(Pessoa_.nome)))
+
+        val predicates = criarRestricoes(lancamentoFilter, builder, root)
+        criteria.where(*predicates)
+
+        val query = manager!!.createQuery(criteria)
+        adicionarRestricoesDePaginacao(query, pageable)
+
+        return PageImpl<ResumoLancamento>(query.resultList, pageable, total(lancamentoFilter))
+
     }
 }
