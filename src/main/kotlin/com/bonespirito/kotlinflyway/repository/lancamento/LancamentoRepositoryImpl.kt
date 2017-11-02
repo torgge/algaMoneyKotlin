@@ -1,9 +1,9 @@
 package com.bonespirito.kotlinflyway.repository.lancamento
 
+import com.bonespirito.kotlinflyway.model.Categoria_
 import com.bonespirito.kotlinflyway.model.Lancamento
-import com.bonespirito.kotlinflyway.model.metamodel.Categoria_
-import com.bonespirito.kotlinflyway.model.metamodel.Lancamento_
-import com.bonespirito.kotlinflyway.model.metamodel.Pessoa_
+import com.bonespirito.kotlinflyway.model.Lancamento_
+import com.bonespirito.kotlinflyway.model.Pessoa_
 import com.bonespirito.kotlinflyway.repository.filter.LancamentoFilter
 import com.bonespirito.kotlinflyway.repository.projection.ResumoLancamento
 import org.springframework.data.domain.Page

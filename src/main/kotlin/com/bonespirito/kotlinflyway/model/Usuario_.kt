@@ -1,7 +1,5 @@
-package com.bonespirito.kotlinflyway.model.metamodel
+package com.bonespirito.kotlinflyway.model
 
-import com.bonespirito.kotlinflyway.model.Permissao
-import com.bonespirito.kotlinflyway.model.Usuario
 import javax.annotation.Generated
 import javax.persistence.metamodel.ListAttribute
 import javax.persistence.metamodel.SingularAttribute

@@ -1,6 +1,4 @@
-package com.bonespirito.kotlinflyway.model.metamodel
-
-import com.bonespirito.kotlinflyway.model.Endereco
+package com.bonespirito.kotlinflyway.model
 
 import javax.annotation.Generated
 import javax.persistence.metamodel.SingularAttribute

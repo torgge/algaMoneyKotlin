@@ -1,6 +1,5 @@
-package com.bonespirito.kotlinflyway.model.metamodel
+package com.bonespirito.kotlinflyway.model
 
-import com.bonespirito.kotlinflyway.model.Categoria
 import javax.annotation.Generated
 import javax.persistence.metamodel.SingularAttribute
 import javax.persistence.metamodel.StaticMetamodel
