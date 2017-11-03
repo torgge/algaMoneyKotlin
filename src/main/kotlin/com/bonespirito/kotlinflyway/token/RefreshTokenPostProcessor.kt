@@ -1,6 +1,8 @@
 package com.bonespirito.kotlinflyway.token
 
 
+import com.bonespirito.kotlinflyway.config.property.AlgamoneyApiProperty
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType
 import org.springframework.http.converter.HttpMessageConverter
@@ -19,6 +21,10 @@ import javax.servlet.http.HttpServletResponse
 
 @ControllerAdvice
 class RefreshTokenPostProcessor : ResponseBodyAdvice<OAuth2AccessToken> {
+
+    @Autowired
+    lateinit private var algamoneyApiProperty: AlgamoneyApiProperty
+
     override fun supports(returnType: MethodParameter, converterType: Class<out HttpMessageConverter<*>>): Boolean {
         return returnType.method.name == "postAccessToken"
     }
@@ -46,7 +52,7 @@ class RefreshTokenPostProcessor : ResponseBodyAdvice<OAuth2AccessToken> {
     private fun adicionarRefreshTokenNoCookie(refreshToken: String, req: HttpServletRequest, resp: HttpServletResponse) {
         val refreshTokenCookie = Cookie("refreshToken", refreshToken)
         refreshTokenCookie.isHttpOnly = true
-        refreshTokenCookie.secure = false // TODO: Mudar para true em producao
+        refreshTokenCookie.secure = algamoneyApiProperty.seguranca.isEnableHttps
         refreshTokenCookie.path = req.contextPath + "/oauth/token"
         refreshTokenCookie.maxAge = 2592000
         resp.addCookie(refreshTokenCookie)

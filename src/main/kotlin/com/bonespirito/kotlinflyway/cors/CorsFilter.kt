@@ -1,5 +1,7 @@
 package com.bonespirito.kotlinflyway.cors
 
+import com.bonespirito.kotlinflyway.config.property.AlgamoneyApiProperty
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
@@ -11,16 +13,19 @@ import javax.servlet.http.HttpServletResponse
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class CorsFilter : Filter {
 
-    private val originPermitida = "http://localhost:8000"
+    @Autowired
+    lateinit private var algamoneyApiProperty : AlgamoneyApiProperty
+
+
 
     override fun doFilter(req: ServletRequest?, resp: ServletResponse?, chain: FilterChain?) {
         val request = req as HttpServletRequest
         val response = resp as HttpServletResponse
 
-        response.setHeader("Access-Control-Allow-Origin", originPermitida)
+        response.setHeader("Access-Control-Allow-Origin", algamoneyApiProperty.originPermitida)
         response.setHeader("Access-Control-Allow-Credentials", "true")
 
-        if ("OPTIONS" == request.method && originPermitida.equals(request.getHeader("Origin"))) {
+        if ("OPTIONS" == request.method && algamoneyApiProperty.originPermitida.equals(request.getHeader("Origin"))) {
             response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS")
             response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept")
             response.setHeader("Access-Control-Max-Age", "3600")

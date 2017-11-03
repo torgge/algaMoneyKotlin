@@ -8,6 +8,7 @@ buildscript {
         commonslang3Version = '3.4'
         springSecurityOauth2Version = '2.2.0.RELEASE'
         springSecurityJwtVersion = '1.0.8.RELEASE'
+        springBootConfigProcVersion = '1.5.8.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -58,6 +59,7 @@ dependencies {
     compile("org.springframework.security.oauth:spring-security-oauth2:${springSecurityOauth2Version}")
     compile("org.springframework.security:spring-security-jwt:${springSecurityJwtVersion}")
     compile("mysql:mysql-connector-java:${mysqlVersion}")
+    compile("org.springframework.boot:spring-boot-configuration-processor:${springBootConfigProcVersion}")
     testCompile('org.springframework.boot:spring-boot-starter-test')
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('org.springframework.boot:spring-boot-starter-tomcat')
