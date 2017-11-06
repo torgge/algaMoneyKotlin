@@ -28,6 +28,11 @@ apply plugin: 'war'
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
+springBoot {
+    mainClass = "com.bonespirito.kotlinflyway.KotlinflywayApplicationKt"
+}
+
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
