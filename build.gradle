@@ -29,19 +29,6 @@ apply plugin: 'war'
 version = '0.0.1'
 sourceCompatibility = 1.8
 
-task stage(type: Copy, dependsOn: [clean, build]) {
-    from jar.archivePath
-    into project.rootDir
-    rename {
-        'app.jar'
-    }
-}
-stage.mustRunAfter(clean)
-
-clean << {
-    project.file('app.jar').delete()
-}
-
 springBoot {
     mainClass = "com.bonespirito.kotlinflyway.KotlinflywayApplicationKt"
 }
@@ -60,6 +47,20 @@ repositories {
 configurations {
     providedRuntime
 }
+
+task stage() {
+    dependsOn clean, war
+}
+war.mustRunAfter clean
+
+task copyToLib(type: Copy) {
+    into "$buildDir/server"
+    from(configurations.compile) {
+        include "webapp-runner*"
+    }
+}
+
+stage.dependsOn(copyToLib)
 
 dependencies {
     compile("org.apache.commons:commons-lang3:${commonslang3Version}")
@@ -81,4 +82,6 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('org.springframework.boot:spring-boot-starter-tomcat')
+//    Heroku
+    compile('com.github.jsimone:webapp-runner:8.5.11.3')
 }
