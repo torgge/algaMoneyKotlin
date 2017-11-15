@@ -83,5 +83,6 @@ dependencies {
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('org.springframework.boot:spring-boot-starter-tomcat')
 //    Heroku
+    compile('com.heroku.sdk:heroku-jdbc:0.1.1')
     compile('com.github.jsimone:webapp-runner:8.5.11.3')
 }
