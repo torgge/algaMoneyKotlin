@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.1.51'
+        kotlinVersion = '1.1.60'
         springBootVersion = '1.5.8.RELEASE'
         mysqlVersion = '5.1.6'
         hibernateVersion = '5.2.10.Final'
@@ -25,9 +25,6 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
-plugins {
-    id "com.heroku.sdk.heroku-gradle" version "0.2.0"
-}
 
 version = '0.0.1'
 sourceCompatibility = 1.8
