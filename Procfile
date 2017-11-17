@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar build/server/webapp-runner-*.jar build/libs/*.war
+web: cd build ; java -Dspring.profiles.active=prod -Dgrails.env=prod -jar ../build/server/webapp-runner-*.jar --expand-war --port $PORT libs/*.war
