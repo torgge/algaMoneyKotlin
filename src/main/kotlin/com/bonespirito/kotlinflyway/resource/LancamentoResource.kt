@@ -86,5 +86,17 @@ class LancamentoResource(val repository: LancamentoRepository) {
         return ResponseEntity.badRequest().body(erros)
     }
 
+    @PutMapping("/{codigo}")
+    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO')")
+    fun atualizar(@PathVariable codigo: Long?, @Valid @RequestBody lancamento: Lancamento): ResponseEntity<Lancamento> {
+        try {
+            val lancamentoServ = lancamentoService
+            val lancamentoSalvo = if (lancamentoServ != null) lancamentoServ.atualizar(codigo, lancamento) else null
+            return ResponseEntity.ok(lancamentoSalvo)
+        } catch (e: IllegalArgumentException) {
+            return ResponseEntity.notFound().build()
+        }
+    }
+
 }
 
