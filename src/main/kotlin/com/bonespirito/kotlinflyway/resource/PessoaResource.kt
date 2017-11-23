@@ -68,7 +68,7 @@ class PessoaResource (val repository: PessoaRepository) {
         pessoaService?.atualizarPropriedadeAtivo(codigo, ativo!!)
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     @PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasAnyScope('read')")
     fun listar() : List<Pessoa> = repository.findAll()
 

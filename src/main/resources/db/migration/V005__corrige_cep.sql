@@ -1,0 +1,10 @@
+update pessoa set cep = '38.400-121' where nome = 'João Silva';
+UPDATE pessoa SET cep = '11.400-121' WHERE nome = 'Maria Rita';
+UPDATE pessoa SET cep = '54.212-121' WHERE nome = 'Predro Santos';
+UPDATE pessoa SET cep = '38.400-121' WHERE nome = 'Ricardo Pereira';
+UPDATE pessoa SET cep = '56.400-121' WHERE nome = 'Josué Mariano';
+UPDATE pessoa SET cep = '77.400-121' WHERE nome = 'Pedro Barbosa';
+UPDATE pessoa SET cep = '12.400-121' WHERE nome = 'Henrique Medeiros';
+UPDATE pessoa SET cep = '31.400-121' WHERE nome = 'Carlos Santana';
+UPDATE pessoa SET cep = '38.400-000' WHERE nome = 'Leonardo Oliveira';
+UPDATE pessoa SET cep = '99.400-121' WHERE nome = 'Isabela Martins';
