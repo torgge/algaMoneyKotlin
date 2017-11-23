@@ -6,12 +6,15 @@ import com.bonespirito.kotlinflyway.repository.PessoaRepository
 import com.bonespirito.kotlinflyway.service.PessoaService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
+
 
 @RestController
 @RequestMapping("/pessoas")
@@ -22,10 +25,6 @@ class PessoaResource (val repository: PessoaRepository) {
 
     @Autowired
     var pessoaService: PessoaService? = null
-
-    @GetMapping
-    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasAnyScope('read')")
-    fun listar() : List<Pessoa> = repository.findAll()
 
     @GetMapping("/{codigo}")
     @PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasAnyScope('read')")
@@ -67,5 +66,15 @@ class PessoaResource (val repository: PessoaRepository) {
     fun atualizaPropriedadeAtivo(@PathVariable codigo: Long, @RequestBody ativo: Boolean?) {
         /*funcao atualizarPropriedadeAtivo, não aceita propriedade ativo como nula por isso usa-se !!*/
         pessoaService?.atualizarPropriedadeAtivo(codigo, ativo!!)
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasAnyScope('read')")
+    fun listar() : List<Pessoa> = repository.findAll()
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA')")
+    fun pesquisar(@RequestParam(required = false, defaultValue = "%") nome: String, pageable: Pageable): Page<Pessoa> {
+        return repository.findByNomeContaining(nome, pageable)
     }
 }
