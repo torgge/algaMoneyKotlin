@@ -1,7 +1,6 @@
 package com.bonespirito.kotlinflyway.resource
 
 import com.bonespirito.kotlinflyway.config.property.AlgamoneyApiProperty
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,10 +11,7 @@ import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/tokens")
-class TokenResource {
-
-    @Autowired
-    lateinit var algamoneyApiProperty: AlgamoneyApiProperty
+class TokenResource(val algamoneyApiProperty : AlgamoneyApiProperty) {
 
     @DeleteMapping("/revoke")
     fun revoke(req : HttpServletRequest, resp : HttpServletResponse) {

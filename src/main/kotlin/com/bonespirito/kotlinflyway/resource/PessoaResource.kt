@@ -4,7 +4,6 @@ import com.bonespirito.kotlinflyway.event.RecursoCriadoEvent
 import com.bonespirito.kotlinflyway.model.Pessoa
 import com.bonespirito.kotlinflyway.repository.PessoaRepository
 import com.bonespirito.kotlinflyway.service.PessoaService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -18,13 +17,8 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/pessoas")
-class PessoaResource (val repository: PessoaRepository) {
-
-    @Autowired
-    var publisher : ApplicationEventPublisher? = null
-
-    @Autowired
-    var pessoaService: PessoaService? = null
+class PessoaResource (val repository: PessoaRepository, val publisher : ApplicationEventPublisher,
+                      val pessoaService: PessoaService) {
 
     @GetMapping("/{codigo}")
     @PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasAnyScope('read')")
@@ -37,7 +31,7 @@ class PessoaResource (val repository: PessoaRepository) {
     @PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasAnyScope('write')")
     fun criar(@Valid @RequestBody pessoa: Pessoa, response: HttpServletResponse): ResponseEntity<Pessoa> {
         val pessoaSalva = repository.save(pessoa)
-        publisher?.publishEvent(RecursoCriadoEvent(
+        publisher.publishEvent(RecursoCriadoEvent(
                 source = this,
                 response = response,
                 codigo = pessoaSalva.codigo
@@ -55,7 +49,7 @@ class PessoaResource (val repository: PessoaRepository) {
     @PutMapping("/{codigo}")
     @PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasAnyScope('write')")
     fun atualizar(@PathVariable codigo: Long, @Valid @RequestBody pessoa: Pessoa): ResponseEntity<Pessoa> {
-        val pessoaSalva: Pessoa? = pessoaService?.atualizar(codigo = codigo, pessoa = pessoa)
+        val pessoaSalva: Pessoa? = pessoaService.atualizar(codigo = codigo, pessoa = pessoa)
         return ResponseEntity.ok(pessoaSalva)
     }
 
@@ -65,7 +59,7 @@ class PessoaResource (val repository: PessoaRepository) {
             /*parametro ativo nullavel, para ser tratado no exceptionhandler*/
     fun atualizaPropriedadeAtivo(@PathVariable codigo: Long, @RequestBody ativo: Boolean?) {
         /*funcao atualizarPropriedadeAtivo, não aceita propriedade ativo como nula por isso usa-se !!*/
-        pessoaService?.atualizarPropriedadeAtivo(codigo, ativo!!)
+        pessoaService.atualizarPropriedadeAtivo(codigo, ativo!!)
     }
 
     @GetMapping("/listar")

@@ -9,7 +9,6 @@ import com.bonespirito.kotlinflyway.repository.filter.LancamentoFilter
 import com.bonespirito.kotlinflyway.repository.projection.ResumoLancamento
 import com.bonespirito.kotlinflyway.service.LancamentoService
 import com.bonespirito.kotlinflyway.service.exception.PessoaInexistenteOuInativaException
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
@@ -23,19 +22,10 @@ import java.util.*
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 
-
 @RestController
 @RequestMapping("/lancamentos")
-class LancamentoResource(val repository: LancamentoRepository) {
-
-    @Autowired
-    var publisher: ApplicationEventPublisher? = null
-
-    @Autowired
-    val lancamentoService: LancamentoService? = null
-
-    @Autowired
-    val messageSource: MessageSource? = null
+class LancamentoResource(val repository: LancamentoRepository, val publisher: ApplicationEventPublisher,
+                         val lancamentoService: LancamentoService, val messageSource: MessageSource) {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasAnyScope('read')")
@@ -59,13 +49,13 @@ class LancamentoResource(val repository: LancamentoRepository) {
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and #oauth2.hasAnyScope('write')")
     fun criar(@Valid @RequestBody lancamento: Lancamento, response: HttpServletResponse): ResponseEntity<Lancamento> {
-        val lancamentoSalvo = lancamentoService?.salvar(lancamento)
+        val lancamentoSalvo = lancamentoService.salvar(lancamento)
 
-        publisher?.publishEvent(
+        publisher.publishEvent(
                 RecursoCriadoEvent(
                         this,
                         response,
-                        lancamentoSalvo?.codigo
+                        lancamentoSalvo.codigo
                 ))
 
         return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo)
@@ -80,7 +70,7 @@ class LancamentoResource(val repository: LancamentoRepository) {
 
     @ExceptionHandler(PessoaInexistenteOuInativaException::class)
     fun handlePessoaInexistenteOuInativaException(ex: PessoaInexistenteOuInativaException): ResponseEntity<Any> {
-        val mensagemUsuario = messageSource?.getMessage("pessoa.inexistente-ou-inativa", null, LocaleContextHolder.getLocale())
+        val mensagemUsuario = messageSource.getMessage("pessoa.inexistente-ou-inativa", null, LocaleContextHolder.getLocale())
         val mensagemDesenvolvedor = ex.toString()
         val erros = Arrays.asList(AlgamoneyExceptionHandler.Erro(mensagemUsuario, mensagemDesenvolvedor))
         return ResponseEntity.badRequest().body(erros)
@@ -89,11 +79,10 @@ class LancamentoResource(val repository: LancamentoRepository) {
     @PutMapping("/{codigo}")
     @PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO')")
     fun atualizar(@PathVariable codigo: Long?, @Valid @RequestBody lancamento: Lancamento): ResponseEntity<Lancamento> {
-        try {
-            val lancamentoSalvo = if (lancamentoService != null) lancamentoService?.atualizar(codigo, lancamento) else null
-            return ResponseEntity.ok(lancamentoSalvo)
+        return try {
+            ResponseEntity.ok(lancamentoService.atualizar(codigo, lancamento))
         } catch (e: IllegalArgumentException) {
-            return ResponseEntity.notFound().build()
+            ResponseEntity.notFound().build()
         }
     }
 
