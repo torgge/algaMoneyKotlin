@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.1.60'
+        kotlinVersion = '1.1.61'
         springBootVersion = '1.5.8.RELEASE'
         mysqlVersion = '5.1.6'
         hibernateVersion = '5.2.10.Final'
