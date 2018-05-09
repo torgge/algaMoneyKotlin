@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 open class AlgamoneyApiProperty {
 
     val seguranca = Seguranca()
-    val originPermitida = "*"
+    val originPermitida = "177.73.102.21"
 
     class Seguranca(var isEnableHttps: Boolean = false)
 }
