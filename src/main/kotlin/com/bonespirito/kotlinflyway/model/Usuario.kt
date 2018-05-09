@@ -5,13 +5,12 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "usuario")
-class Usuario() {
-
-    @Id
-    var codigo: Long = 0
-    var nome : String = ""
-    var senha : String = ""
-    var email : String = ""
+class Usuario(
+        @Id var codigo: Long = 0,
+        var nome: String = "",
+        var senha: String = "",
+        var email: String = ""
+) {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "usuario_permissao", joinColumns = (arrayOf(JoinColumn(name = "codigo_usuario")))

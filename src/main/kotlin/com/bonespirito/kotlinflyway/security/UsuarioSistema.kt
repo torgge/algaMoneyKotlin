@@ -5,9 +5,6 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.User
 
 
-class UsuarioSistema : User {
-    var usuario : Usuario? = null
-    constructor(usuario: Usuario, authorities: MutableCollection<out GrantedAuthority>?) : super(usuario.nome, usuario.senha, authorities){
-        this.usuario = usuario
-    }
+class UsuarioSistema(username: String?, password: String?, authorities: MutableCollection<out GrantedAuthority>?) : User(username, password, authorities){
+    val usuario = Usuario(0, "ADMIN", password!!, username!!)
 }
