@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute
 import javax.persistence.metamodel.StaticMetamodel
 
 
-@Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
+@Generated(value = ["org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor"])
 @StaticMetamodel(Usuario::class)
 object Usuario_ {
 
