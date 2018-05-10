@@ -94,3 +94,4 @@ dependencies {
     compile('com.heroku.sdk:heroku-jdbc:0.1.1')
     compile('com.github.jsimone:webapp-runner:8.5.11.3')
 }
+compileJava.dependsOn(processResources)

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse
 class CorsFilter : Filter {
 
     @Autowired
-    lateinit private var algamoneyApiProperty : AlgamoneyApiProperty
+    private lateinit var algamoneyApiProperty : AlgamoneyApiProperty
 
 
 
