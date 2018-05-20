@@ -20,7 +20,7 @@ class BasicSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(auth: AuthenticationManagerBuilder?) {
-        auth!!.userDetailsService<UserDetailsService>(userDetailsService).passwordEncoder(passwordEncoder())
+        auth?.userDetailsService(userDetailsService)?.passwordEncoder(passwordEncoder())
     }
 
     @Bean

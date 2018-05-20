@@ -18,7 +18,7 @@ class TokenResource(val algamoneyApiProperty : AlgamoneyApiProperty) {
 
         val cookie = Cookie("refreshToken", null)
         cookie.isHttpOnly = true
-        cookie.secure = algamoneyApiProperty.seguranca.isEnableHttps
+        cookie.secure = algamoneyApiProperty.getSeguranca().isEnableHttps()
         cookie.path = req.contextPath + "/oauth/token"
         cookie.maxAge = 0
 

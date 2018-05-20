@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "usuario")
-class Usuario(
+open class Usuario(
         @Id var codigo: Long = 0,
         var nome: String = "",
         var senha: String = "",

@@ -16,6 +16,9 @@ import org.springframework.security.oauth2.provider.token.TokenStore
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore
 import java.util.*
+import java.util.Arrays.asList
+
+
 
 @Profile("oauth-security")
 @Configuration
@@ -45,10 +48,10 @@ class AuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
     override fun configure(endpoints: AuthorizationServerEndpointsConfigurer?) {
         val tokenEnhancerChain = TokenEnhancerChain()
         tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverter()))
+
         endpoints!!
                 .tokenStore(tokenStore())
                 .tokenEnhancer(tokenEnhancerChain)
-                //.accessTokenConverter(accessTokenConverter())
                 .reuseRefreshTokens(false)
                 .authenticationManager(authenticationManager)
     }

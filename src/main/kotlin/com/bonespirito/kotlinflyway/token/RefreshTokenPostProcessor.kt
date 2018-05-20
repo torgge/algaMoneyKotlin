@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse
 class RefreshTokenPostProcessor : ResponseBodyAdvice<OAuth2AccessToken> {
 
     @Autowired
-    lateinit private var algamoneyApiProperty: AlgamoneyApiProperty
+    private lateinit var algamoneyApiProperty: AlgamoneyApiProperty
 
     override fun supports(returnType: MethodParameter, converterType: Class<out HttpMessageConverter<*>>): Boolean {
         return returnType.method.name == "postAccessToken"
@@ -52,7 +52,7 @@ class RefreshTokenPostProcessor : ResponseBodyAdvice<OAuth2AccessToken> {
     private fun adicionarRefreshTokenNoCookie(refreshToken: String, req: HttpServletRequest, resp: HttpServletResponse) {
         val refreshTokenCookie = Cookie("refreshToken", refreshToken)
         refreshTokenCookie.isHttpOnly = true
-        refreshTokenCookie.secure = algamoneyApiProperty.seguranca.isEnableHttps
+        refreshTokenCookie.secure = algamoneyApiProperty.getSeguranca().isEnableHttps()
         refreshTokenCookie.path = req.contextPath + "/oauth/token"
         refreshTokenCookie.maxAge = 2592000
         resp.addCookie(refreshTokenCookie)
