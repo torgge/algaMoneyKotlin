@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 @Profile("basic-security")
 @EnableWebSecurity
 class BasicSecurityConfig : WebSecurityConfigurerAdapter() {
+
     @Autowired
     private val userDetailsService: UserDetailsService? = null
 

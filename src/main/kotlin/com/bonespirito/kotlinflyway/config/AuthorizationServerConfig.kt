@@ -16,8 +16,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore
 import java.util.*
-import java.util.Arrays.asList
-
 
 
 @Profile("oauth-security")
@@ -36,7 +34,7 @@ class AuthorizationServerConfig : AuthorizationServerConfigurerAdapter() {
                 .authorizedGrantTypes("password", "refresh_token")
                 .accessTokenValiditySeconds(1800)
                 .refreshTokenValiditySeconds(3600 * 24)
-            .and()
+                .and()
                 .withClient("mobile")
                 .secret("mobile")
                 .scopes("read")
